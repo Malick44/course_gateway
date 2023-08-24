@@ -1,0 +1,47 @@
+spring:
+  main:
+    allow-bean-definition-overriding: true
+    web-application-type: reactive
+  cloud:
+    gateway:
+      routes:
+        - id: courseinfo
+          uri: http://localhost:7071  # replace with the host and port where your CourseInfo service is running
+          predicates:
+            - Path=/Api/courseinfo/**
+          
+        - id: enrollment_route
+          uri: http://localhost:7072  # replace with the host and port where your Enrollment service is running
+          predicates:
+            - Path=/Api/enrollment/**
+    
+  devtools:
+    livereload:
+      port: 0
+  security:
+    oauth2:
+      client:
+        registration:
+          keycloak:
+            client-id: gateway-service
+            issuer-uri: http://localhost:9090/realms/xlms-app
+            client-secret: beZiYK5C1J7xr4EcoHmzlcEjAS9gRWaD
+            authorization-grant-type: authorization_code
+            redirect-uri: "https://127.0.0.1:3000"
+            scope: reader
+#            provider: keycloak
+        provider:
+         keycloak:
+            issuer-uri: http://localhost:9090/realms/xlms-app
+            token-uri: http://localhost:9090/realms/xlms-app/protocol/openid-connect/token
+            authorization-uri: http://localhost:9090/realms/xlms-app/protocol/openid-connect/auth
+
+
+
+
+
+
+           
+
+server:
+  port: 8080  # the port where the gateway itself will be accessible
